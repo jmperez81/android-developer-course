@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Asteroids</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="mainTitle">Asteroids</string>
+    <string name="mainButtonPlay">Play</string>
+    <string name="mainButtonSettings">Settings</string>
+    <string name="mainButtonAbout">About&#8230;</string>
+    <string name="mainButtonScores">Score Board</string>
+    <string name="mainButtonExit">Exit</string>
+    <string name="mainVersionInfo">English - Version 1.00 (03/03/2013)</string>
+    <string name="mainDescription">Application&amp;apos;s main screen</string>
+    <string name="mainClock">CurrentTime</string>
+    <string name="aboutActivityLabel">About&#8230;</string>
+    <string name="aboutText">This application has been developed as an example of how to launch an activity from the main activity.</string>
+    <string name="menuAbout">About&#8230;</string>
+    <string name="preferencesMusicSummary">Allow to choose if ingame music will be enabled</string>
+    <string name="preferencesMusicTitle">Ingame music</string>
+    <string name="preferencesGraphicsSummary">Graphic modes for the game</string>
+    <string name="preferencesGraphicsTitle">Graphic mode</string>
+    <string name="preferencesFragmentsSummary">Number of fragments an asteroid will be divided when destroyed</string>
+    <string name="preferencesFragmentsTitle">Fragments per asteroid</string>
+    <string name="preferencesActivityLabel">Preferences</string>
+    <string name="scoreBoardTitle">Score board</string>
+    <string name="scoreBoardEmptyList">There is not any score registered</string>
+
+</resources>
