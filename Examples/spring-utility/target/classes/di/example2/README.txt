@@ -1,1 +1,0 @@
-Remember : Lazy inits works only if the Bean is not a dependency of another bean

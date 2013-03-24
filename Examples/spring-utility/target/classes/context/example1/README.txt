@@ -1,1 +1,0 @@
-You can inherit from another ApplicationContext  ( i.e. MVC do that )

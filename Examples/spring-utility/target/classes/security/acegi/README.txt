@@ -1,1 +1,0 @@
-XML Namespaces are so usefull, they simplifies common needs
