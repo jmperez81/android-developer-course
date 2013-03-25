@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">GraphicsExample</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Go to example 2</string>
     <string name="hello_world">Hello world!</string>
 
 </resources>
