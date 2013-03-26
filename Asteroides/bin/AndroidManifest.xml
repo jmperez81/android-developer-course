@@ -35,5 +35,6 @@
             android:name="com.jmpr.asteroides.activities.Scores"
             android:label="@string/scoreBoardTitle" >
         </activity>
+        <activity android:name=".activities.Game" android:screenOrientation="landscape" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
     </application>
 </manifest>

@@ -109,4 +109,13 @@ public class Asteroids extends Activity {
 		Intent intent = new Intent(this, Scores.class);
 		startActivity(intent);
 	}
+	
+	/**
+	 * Launches the game activity
+	 * @param view
+	 */
+	public void launchGame(View view) {
+		Intent intent = new Intent(this, Game.class);
+		startActivity(intent);
+	}
 }
