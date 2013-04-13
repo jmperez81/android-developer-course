@@ -1,5 +1,6 @@
 package com.jmpr.asteroides.views;
 
+import java.util.List;
 import java.util.Vector;
 
 import com.jmpr.asteroides.R;
@@ -7,11 +8,21 @@ import com.jmpr.asteroides.drawables.CustomGraphic;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint.Style;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
-public class ViewGame extends View {
+public class ViewGame extends View implements SensorEventListener {
 	private Vector<CustomGraphic> asteroids; // Set of current asteroids
 	private int initialAsteroids = 5; // Initial number of asteroids
 	private int fragmentsPerAsteroid = 3; // Fragments to divide an asteroid
@@ -19,6 +30,23 @@ public class ViewGame extends View {
 	private CustomGraphic ship; // Ship graphic
 	private int shipSteer; // Direction increment
 	private float shipAcceleration; // Ship speed increment
+
+	// Touch screen handling
+	private float mX = 0, mY = 0;
+	private boolean shot = false;
+	private final int SENSITIVITY_Y = 6;
+	private final int SENSITIVITY_X = 6;
+	private final int ACCELERATION_FACTOR_MIN = 2;
+	private final int ACCELERATION_FACTOR_MAX = 25;
+
+	// Missile
+	private CustomGraphic missile;
+	private static int STEP_MISSILE_SPEED = 12;
+	private boolean missileActive = false;
+	private int missileTime;
+
+	// Graphics type (should be read from preferences, fixed right now
+	int graphicsType = 0;
 
 	// ***********************************
 	// Threads
@@ -34,6 +62,11 @@ public class ViewGame extends View {
 	private static final int SHIP_STEER_STEP = 5;
 	private static final float SHIP_ACC_STEP = 0.5f;
 
+	// Sensor management
+	private boolean existInitValue = false;
+	private float initValue;
+
+	// Constructor
 	public ViewGame(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		Drawable drawableShip, drawableAsteroid, drawableMissile;
@@ -51,11 +84,37 @@ public class ViewGame extends View {
 			asteroide.setRotation((int) (Math.random() * 8 - 4));
 			asteroids.add(asteroide);
 		}
+
+		// Sensor registration
+		SensorManager mSensorManager = (SensorManager) context
+				.getSystemService(Context.SENSOR_SERVICE);
+		List<Sensor> listSensors = mSensorManager
+				.getSensorList(Sensor.TYPE_ORIENTATION);
+		if (!listSensors.isEmpty()) {
+			Sensor orientationSensor = listSensors.get(0);
+			mSensorManager.registerListener(this, orientationSensor,
+					SensorManager.SENSOR_DELAY_GAME);
+		}
+
+		// Missile
+		if (graphicsType == 0) {
+			ShapeDrawable dMisil = new ShapeDrawable(new RectShape());
+			dMisil.getPaint().setColor(Color.WHITE);
+			dMisil.getPaint().setStyle(Style.STROKE);
+			dMisil.setIntrinsicWidth(15);
+			dMisil.setIntrinsicHeight(3);
+			drawableMissile = dMisil;
+		} else {
+			drawableMissile = context.getResources().getDrawable(
+					R.drawable.ship);
+		}
+
+		missile = new CustomGraphic(this, drawableMissile);
 	}
 
 	@Override
-	synchronized protected void onSizeChanged(int width, int height, int prevWidth,
-			int prevHeight) {
+	synchronized protected void onSizeChanged(int width, int height,
+			int prevWidth, int prevHeight) {
 
 		super.onSizeChanged(width, height, prevWidth, prevHeight);
 
@@ -73,7 +132,7 @@ public class ViewGame extends View {
 						* (height - asteroid.getHeight()));
 			} while (asteroid.getDistanceTo(ship) < (width + height) / 5);
 		}
-		
+
 		lastProcessmentTime = System.currentTimeMillis();
 		thread.start();
 	}
@@ -87,6 +146,11 @@ public class ViewGame extends View {
 		}
 
 		ship.renderGraphic(canvas);
+
+		// Draw missile only if it is active
+		if (missileActive) {
+			missile.renderGraphic(canvas);
+		}
 	}
 
 	synchronized protected void updatePhysics() {
@@ -119,6 +183,42 @@ public class ViewGame extends View {
 		for (CustomGraphic asteroid : asteroids) {
 			asteroid.updatePosition(delay);
 		}
+
+		// Missile behaviour
+		if (missileActive) {
+			missile.updatePosition(delay);
+			missileTime -= delay;
+			if (missileTime < 0) {
+				missileActive = false;
+			} else {
+				for (int i = 0; i < asteroids.size(); i++)
+					if (missile.checkCollision(asteroids.elementAt(i))) {
+						destroyAsteroid(i);
+						break;
+					}
+			}
+		}
+	}
+
+	private void activateMissile() {
+		missile.setPosX(ship.getPosX() + ship.getWidth() / 2
+				- missile.getWidth() / 2);
+		missile.setPosY(ship.getPosY() + ship.getHeight() / 2
+				- missile.getHeight() / 2);
+		missile.setAngle(ship.getAngle());
+		missile.setIncX(Math.cos(Math.toRadians(missile.getAngle()))
+				* STEP_MISSILE_SPEED);
+		missile.setIncY(Math.sin(Math.toRadians(missile.getAngle()))
+				* STEP_MISSILE_SPEED);
+		missileTime = (int) Math.min(
+				this.getWidth() / Math.abs(missile.getIncX()), this.getHeight()
+						/ Math.abs(missile.getIncY())) - 2;
+		missileActive = true;
+	}
+
+	private void destroyAsteroid(int i) {
+		asteroids.remove(i);
+		missileActive = false;
 	}
 
 	class MainThread extends Thread {
@@ -128,5 +228,60 @@ public class ViewGame extends View {
 				updatePhysics();
 			}
 		}
+	}
+
+	@Override
+	public void onAccuracyChanged(Sensor sensor, int accuracy) {
+		// Nothing done
+
+	}
+
+	@Override
+	public void onSensorChanged(SensorEvent event) {
+		float value = event.values[1];
+		if (!existInitValue) {
+			initValue = value;
+			existInitValue = true;
+		}
+		shipSteer = (int) (value - initValue) / 3;
+
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		super.onTouchEvent(event);
+		float x = event.getX();
+		float y = event.getY();
+		switch (event.getAction()) {
+		case MotionEvent.ACTION_DOWN:
+			shot = true;
+			break;
+		case MotionEvent.ACTION_MOVE:
+			float dx = Math.abs(x - mX);
+			float dy = Math.abs(y - mY);
+			if (dy < SENSITIVITY_Y && dx > SENSITIVITY_X) {
+				shipSteer = Math.round((x - mX) / ACCELERATION_FACTOR_MIN);
+				shot = false;
+			} else if (dx < SENSITIVITY_X && dy > SENSITIVITY_Y) {
+				if ((mY - y) > 0) {
+					Log.d("Asteroids", "Acceleration modified : " + (mY - y));
+					shipAcceleration = Math.round((mY - y) / ACCELERATION_FACTOR_MAX);
+				} else {
+					Log.d("Asteroids", "Acceleration not modified");
+				}
+				shot = false;
+			}
+			break;
+		case MotionEvent.ACTION_UP:
+			shipSteer = 0;
+			shipAcceleration = 0;
+			if (shot) {
+				activateMissile();
+			}
+			break;
+		}
+		mX = x;
+		mY = y;
+		return true;
 	}
 }
