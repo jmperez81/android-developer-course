@@ -3,9 +3,6 @@ package com.jmpr.asteroides.views;
 import java.util.List;
 import java.util.Vector;
 
-import com.jmpr.asteroides.R;
-import com.jmpr.asteroides.drawables.CustomGraphic;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -22,7 +19,12 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.jmpr.asteroides.R;
+import com.jmpr.asteroides.drawables.CustomGraphic;
+
 public class ViewGame extends View implements SensorEventListener {
+	private Context context;
+	
 	private Vector<CustomGraphic> asteroids; // Set of current asteroids
 	private int initialAsteroids = 5; // Initial number of asteroids
 	private int fragmentsPerAsteroid = 3; // Fragments to divide an asteroid
@@ -48,6 +50,11 @@ public class ViewGame extends View implements SensorEventListener {
 	// Graphics type (should be read from preferences, fixed right now
 	int graphicsType = 0;
 
+	// Sensor management
+	private boolean existInitValue = false;
+	private float initValue;
+	SensorManager mSensorManager;
+	
 	// ***********************************
 	// Threads
 	// ***********************************
@@ -62,13 +69,10 @@ public class ViewGame extends View implements SensorEventListener {
 	private static final int SHIP_STEER_STEP = 5;
 	private static final float SHIP_ACC_STEP = 0.5f;
 
-	// Sensor management
-	private boolean existInitValue = false;
-	private float initValue;
-
 	// Constructor
 	public ViewGame(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		this.context = context;
 		Drawable drawableShip, drawableAsteroid, drawableMissile;
 		drawableAsteroid = context.getResources().getDrawable(
 				R.drawable.asteroid1);
@@ -85,17 +89,6 @@ public class ViewGame extends View implements SensorEventListener {
 			asteroids.add(asteroide);
 		}
 
-		// Sensor registration
-		SensorManager mSensorManager = (SensorManager) context
-				.getSystemService(Context.SENSOR_SERVICE);
-		List<Sensor> listSensors = mSensorManager
-				.getSensorList(Sensor.TYPE_ORIENTATION);
-		if (!listSensors.isEmpty()) {
-			Sensor orientationSensor = listSensors.get(0);
-			mSensorManager.registerListener(this, orientationSensor,
-					SensorManager.SENSOR_DELAY_GAME);
-		}
-
 		// Missile
 		if (graphicsType == 0) {
 			ShapeDrawable dMisil = new ShapeDrawable(new RectShape());
@@ -110,6 +103,10 @@ public class ViewGame extends View implements SensorEventListener {
 		}
 
 		missile = new CustomGraphic(this, drawableMissile);
+	}
+
+	public MainThread getThread() {
+		return thread;
 	}
 
 	@Override
@@ -221,11 +218,37 @@ public class ViewGame extends View implements SensorEventListener {
 		missileActive = false;
 	}
 
-	class MainThread extends Thread {
+	public class MainThread extends Thread {
+		private boolean paused, running;
+
+		public synchronized void pause() {
+			paused = true;
+		}
+
+		public synchronized void resume2() {
+			paused = false;
+			notify();
+		}
+
+		public void stop2() {
+			running = false;
+			if (paused)
+				resume2();
+		}
+
 		@Override
 		public void run() {
-			while (true) {
+			running = true;
+			while (running) {
 				updatePhysics();
+				synchronized (this) {
+					while (paused) {
+						try {
+							wait();
+						} catch (Exception e) {
+						}
+					}
+				}
 			}
 		}
 	}
@@ -265,7 +288,8 @@ public class ViewGame extends View implements SensorEventListener {
 			} else if (dx < SENSITIVITY_X && dy > SENSITIVITY_Y) {
 				if ((mY - y) > 0) {
 					Log.d("Asteroids", "Acceleration modified : " + (mY - y));
-					shipAcceleration = Math.round((mY - y) / ACCELERATION_FACTOR_MAX);
+					shipAcceleration = Math.round((mY - y)
+							/ ACCELERATION_FACTOR_MAX);
 				} else {
 					Log.d("Asteroids", "Acceleration not modified");
 				}
@@ -283,5 +307,25 @@ public class ViewGame extends View implements SensorEventListener {
 		mX = x;
 		mY = y;
 		return true;
+	}
+	
+	public void deactivateSensors() {
+		mSensorManager.unregisterListener(this);
+		Log.d("debug", "Sensors deactivated");
+	}
+	
+	public void activateSensors() {				
+		// Sensor registration
+		mSensorManager = (SensorManager) context
+				.getSystemService(Context.SENSOR_SERVICE);
+		List<Sensor> listSensors = mSensorManager
+				.getSensorList(Sensor.TYPE_ORIENTATION);
+		if (!listSensors.isEmpty()) {
+			Sensor orientationSensor = listSensors.get(0);
+			mSensorManager.registerListener(this, orientationSensor,
+					SensorManager.SENSOR_DELAY_GAME);
+		}
+		
+		Log.d("debug", "Sensors activated");
 	}
 }

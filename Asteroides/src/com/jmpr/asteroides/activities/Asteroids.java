@@ -2,7 +2,9 @@ package com.jmpr.asteroides.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,13 +16,19 @@ import com.jmpr.asteroides.util.ScoreBoard;
 import com.jmpr.asteroides.util.ScoreBoardArray;
 
 public class Asteroids extends Activity {
+	public static ScoreBoard scoreBoard = new ScoreBoardArray();
+	
 	private Button aboutButton;
 	private Button exitButton;
-	public static ScoreBoard scoreBoard = new ScoreBoardArray();
+	private MediaPlayer mp;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		// Floating message
+		// Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show();
+
 		setContentView(R.layout.main);
 
 		// This is an alternate way to establish a Listener. Allows not only
@@ -41,6 +49,10 @@ public class Asteroids extends Activity {
 				launchExit(null);
 			}
 		});
+		
+		// Loads midi file
+		mp = MediaPlayer.create(this, R.raw.audio);
+		mp.start();
 	}
 
 	/**
@@ -100,22 +112,98 @@ public class Asteroids extends Activity {
 	public void launchExit(View view) {
 		finish();
 	}
-	
+
 	/**
 	 * Launches the ScoreBoard activity
+	 * 
 	 * @param view
 	 */
 	public void launchScoreBoard(View view) {
 		Intent intent = new Intent(this, Scores.class);
 		startActivity(intent);
 	}
-	
+
 	/**
 	 * Launches the game activity
+	 * 
 	 * @param view
 	 */
 	public void launchGame(View view) {
 		Intent intent = new Intent(this, Game.class);
 		startActivity(intent);
 	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		Log.d("debug", "Asteroids activity onResume()");
+		
+		// Resumes music
+		mp.start();
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();		
+		Log.d("debug", "Asteroids activity onPause()");
+		
+		// Stops music
+		mp.pause();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		
+		Log.d("debug", "Asteroids activity onDestroy()");
+		
+		// Stops music
+		mp.stop();
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		
+		Log.d("debug", "Asteroids activity onStop()");
+		
+		// Pauses music
+		mp.pause();
+	}
+
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		
+		Log.d("debug", "Asteroids activity onRestart()");
+
+		// Resumes music
+		mp.start();
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		
+		Log.d("debug", "Asteroids activity onStart()");
+		
+		// Starts music
+		mp.start();
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		Log.d("debug", "Restoring saved activity state");		
+		mp.seekTo(savedInstanceState.getInt("musicLastPosition"));
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		Log.d("debug", "Saving activity state");
+		outState.putInt("musicLastPosition", mp.getCurrentPosition());		
+	}
+	
 }
