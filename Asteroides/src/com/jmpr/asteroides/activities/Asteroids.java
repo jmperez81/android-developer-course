@@ -12,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.jmpr.asteroides.R;
+import com.jmpr.asteroides.services.MusicService;
 import com.jmpr.asteroides.util.ScoreBoard;
 import com.jmpr.asteroides.util.ScoreBoardArray;
 
@@ -50,9 +51,12 @@ public class Asteroids extends Activity {
 			}
 		});
 		
-		// Loads midi file
-		mp = MediaPlayer.create(this, R.raw.audio);
-		mp.start();
+		// Loads midi file (not necessary because we have a service to do that)
+		// mp = MediaPlayer.create(this, R.raw.audio);
+		// mp.start();
+		
+		// Launch music service
+		startService(new Intent(Asteroids.this, MusicService.class));
 	}
 
 	/**
@@ -140,7 +144,7 @@ public class Asteroids extends Activity {
 		Log.d("debug", "Asteroids activity onResume()");
 		
 		// Resumes music
-		mp.start();
+		// mp.start();
 	}
 
 	@Override
@@ -149,7 +153,7 @@ public class Asteroids extends Activity {
 		Log.d("debug", "Asteroids activity onPause()");
 		
 		// Stops music
-		mp.pause();
+		// mp.pause();
 	}
 
 	@Override
@@ -159,7 +163,10 @@ public class Asteroids extends Activity {
 		Log.d("debug", "Asteroids activity onDestroy()");
 		
 		// Stops music
-		mp.stop();
+		// mp.stop();
+		
+		// Stops music service
+		stopService(new Intent(Asteroids.this, MusicService.class));
 	}
 
 	@Override
@@ -169,7 +176,7 @@ public class Asteroids extends Activity {
 		Log.d("debug", "Asteroids activity onStop()");
 		
 		// Pauses music
-		mp.pause();
+		// mp.pause();
 	}
 
 	@Override
@@ -179,7 +186,7 @@ public class Asteroids extends Activity {
 		Log.d("debug", "Asteroids activity onRestart()");
 
 		// Resumes music
-		mp.start();
+		// mp.start();
 	}
 	
 	@Override
@@ -189,21 +196,21 @@ public class Asteroids extends Activity {
 		Log.d("debug", "Asteroids activity onStart()");
 		
 		// Starts music
-		mp.start();
+		// mp.start();
 	}
 
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
 		Log.d("debug", "Restoring saved activity state");		
-		mp.seekTo(savedInstanceState.getInt("musicLastPosition"));
+		// mp.seekTo(savedInstanceState.getInt("musicLastPosition"));
 	}
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		Log.d("debug", "Saving activity state");
-		outState.putInt("musicLastPosition", mp.getCurrentPosition());		
+		// outState.putInt("musicLastPosition", mp.getCurrentPosition());		
 	}
 	
 }

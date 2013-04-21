@@ -85,6 +85,11 @@ public final class R {
         public static final int mainVersionInfo=0x7f080009;
         public static final int menuAbout=0x7f08000f;
         public static final int menuConfiguration=0x7f08000e;
+        public static final int musicServiceNotificationInfo=0x7f08001c;
+        public static final int musicServiceNotificationInfo2=0x7f08001d;
+        public static final int musicServiceNotificationTitle=0x7f08001b;
+        public static final int musicServiceStarted=0x7f080019;
+        public static final int musicServiceStopped=0x7f08001a;
         public static final int preferencesActivityLabel=0x7f080016;
         public static final int preferencesFragmentsSummary=0x7f080014;
         public static final int preferencesFragmentsTitle=0x7f080015;

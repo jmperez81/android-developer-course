@@ -24,5 +24,9 @@
     <string name="preferencesActivityLabel">Preferencias</string>
     <string name="scoreBoardTitle">Puntuaciones</string>
     <string name="scoreBoardEmptyList">No hay ninguna puntuación almacenada</string>
-
+	<string name="musicServiceStarted">Servicio de reproducción de música de Asteroids creado</string>
+	<string name="musicServiceStopped">Servicio de reproducción de música de Asteroids detenido</string>
+	<string name="musicServiceNotificationTitle">Servicio de reproducción de música en Asteroids activo</string>
+	<string name="musicServiceNotificationInfo">Servicio de reproducción de música en Asteroids activo</string>
+	<string name="musicServiceNotificationInfo2">Pulse aquí para ir a la aplicación Asteroids</string>
 </resources>

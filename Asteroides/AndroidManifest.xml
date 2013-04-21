@@ -25,6 +25,7 @@
         <activity
             android:name="com.jmpr.asteroides.activities.About"
             android:label="@string/aboutActivityLabel"
+            android:launchMode="singleTask"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
         <activity
@@ -36,5 +37,6 @@
             android:label="@string/scoreBoardTitle" >
         </activity>
         <activity android:name=".activities.Game" android:screenOrientation="landscape" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
+        <service android:name=".services.MusicService"></service>
     </application>
 </manifest>

@@ -25,5 +25,9 @@
     <string name="preferencesActivityLabel">Preferences</string>
     <string name="scoreBoardTitle">Score board</string>
     <string name="scoreBoardEmptyList">There is not any score registered</string>
-
+	<string name="musicServiceStarted">Asteroids music service created</string>
+	<string name="musicServiceStopped">Asteroids music service stopped</string>
+	<string name="musicServiceNotificationTitle">Asteroids music service enabled</string>
+	<string name="musicServiceNotificationInfo">Asteroids ingame music service is enabled</string>
+	<string name="musicServiceNotificationInfo2">Tap here to open Asteroids</string>
 </resources>
