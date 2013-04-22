@@ -22,6 +22,8 @@
     <string name="preferencesFragmentsSummary">Número de fragmentos en los que se divide un asteroide al ser destruido</string>
     <string name="preferencesFragmentsTitle">Fragmentos por asteroide</string>
     <string name="preferencesActivityLabel">Preferencias</string>
+    <string name="preferencesStorageTitle">Score storage</string>
+    <string name="preferencesStorageSummary">Define where to store the score information</string>
     <string name="scoreBoardTitle">Puntuaciones</string>
     <string name="scoreBoardEmptyList">No hay ninguna puntuación almacenada</string>
 	<string name="musicServiceStarted">Servicio de reproducción de música de Asteroids creado</string>

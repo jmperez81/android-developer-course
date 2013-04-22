@@ -3,7 +3,9 @@ package com.jmpr.asteroides.views;
 import java.util.List;
 import java.util.Vector;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint.Style;
@@ -14,6 +16,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -54,6 +57,16 @@ public class ViewGame extends View implements SensorEventListener {
 	private boolean existInitValue = false;
 	private float initValue;
 	SensorManager mSensorManager;
+	
+	// Score
+	private int totalScore = 0;
+	
+	// Auxiliary activity for sending score
+	private Activity parentActivity;
+	 
+	public void setParentActivity(Activity padre) {
+	      this.parentActivity = padre;
+	}
 	
 	// ***********************************
 	// Threads
@@ -195,6 +208,13 @@ public class ViewGame extends View implements SensorEventListener {
 					}
 			}
 		}
+		
+		// Player loses
+		for (CustomGraphic asteroid : asteroids) {
+		    if (asteroid.checkCollision(ship)) {
+		       gameOver();
+		    }
+		}
 	}
 
 	private void activateMissile() {
@@ -214,8 +234,14 @@ public class ViewGame extends View implements SensorEventListener {
 	}
 
 	private void destroyAsteroid(int i) {
+		totalScore+=1000;
 		asteroids.remove(i);
 		missileActive = false;
+		
+		// Player wins
+		if (asteroids.isEmpty()) {
+			gameOver();
+		}
 	}
 
 	public class MainThread extends Thread {
@@ -327,5 +353,14 @@ public class ViewGame extends View implements SensorEventListener {
 		}
 		
 		Log.d("debug", "Sensors activated");
+	}
+
+	private void gameOver() {
+	    Bundle bundle = new Bundle();
+	    bundle.putInt("score", totalScore);
+	    Intent intent = new Intent();
+	    intent.putExtras(bundle);
+	    parentActivity.setResult(Activity.RESULT_OK, intent);
+	    parentActivity.finish();
 	}
 }

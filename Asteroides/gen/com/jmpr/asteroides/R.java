@@ -11,6 +11,8 @@ public final class R {
     public static final class array {
         public static final int graphicTypeValues=0x7f060001;
         public static final int graphicTypes=0x7f060000;
+        public static final int storage=0x7f060002;
+        public static final int storageValues=0x7f060003;
     }
     public static final class attr {
     }
@@ -67,6 +69,8 @@ public final class R {
     }
     public static final class raw {
         public static final int audio=0x7f050000;
+        public static final int scores=0x7f050001;
+        public static final int xmlscores=0x7f050002;
     }
     public static final class string {
         public static final int aboutActivityLabel=0x7f08000d;
@@ -85,11 +89,11 @@ public final class R {
         public static final int mainVersionInfo=0x7f080009;
         public static final int menuAbout=0x7f08000f;
         public static final int menuConfiguration=0x7f08000e;
-        public static final int musicServiceNotificationInfo=0x7f08001c;
-        public static final int musicServiceNotificationInfo2=0x7f08001d;
-        public static final int musicServiceNotificationTitle=0x7f08001b;
-        public static final int musicServiceStarted=0x7f080019;
-        public static final int musicServiceStopped=0x7f08001a;
+        public static final int musicServiceNotificationInfo=0x7f08001e;
+        public static final int musicServiceNotificationInfo2=0x7f08001f;
+        public static final int musicServiceNotificationTitle=0x7f08001d;
+        public static final int musicServiceStarted=0x7f08001b;
+        public static final int musicServiceStopped=0x7f08001c;
         public static final int preferencesActivityLabel=0x7f080016;
         public static final int preferencesFragmentsSummary=0x7f080014;
         public static final int preferencesFragmentsTitle=0x7f080015;
@@ -97,8 +101,10 @@ public final class R {
         public static final int preferencesGraphicsTitle=0x7f080013;
         public static final int preferencesMusicSummary=0x7f080010;
         public static final int preferencesMusicTitle=0x7f080011;
-        public static final int scoreBoardEmptyList=0x7f080018;
-        public static final int scoreBoardTitle=0x7f080017;
+        public static final int preferencesStorageSummary=0x7f080017;
+        public static final int preferencesStorageTitle=0x7f080018;
+        public static final int scoreBoardEmptyList=0x7f08001a;
+        public static final int scoreBoardTitle=0x7f080019;
     }
     public static final class style {
         /** 

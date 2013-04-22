@@ -16,6 +16,9 @@ public class Game extends Activity {
 		setContentView(R.layout.game);
 
 		viewGame = (ViewGame) findViewById(R.id.gameView);
+		
+		// Set this activity as parent in game view (necessary for returning the player score)
+		viewGame.setParentActivity(this);
 	}
 
 	@Override

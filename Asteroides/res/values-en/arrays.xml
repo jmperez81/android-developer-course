@@ -10,12 +10,12 @@
         <item>2</item>
     </string-array>
     <string-array name="storage">
-        <item>Array en memoria</item>
-        <item>Fichero de preferencias</item>
-        <item>Memoria del teléfono</item>
-        <item>Memoria externa</item>
-        <item>Fichero de recursos</item>
-        <item>Fichero XML</item>
+        <item>Memory array</item>
+        <item>Preferences file</item>
+        <item>Phone memory</item>
+        <item>External memory</item>
+        <item>Raw file</item>
+        <item>XML file</item>
     </string-array>
     <string-array name="storageValues">
         <item>0</item>

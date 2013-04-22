@@ -15,9 +15,20 @@
         android:summary="@string/preferencesGraphicsSummary"
         android:title="@string/preferencesGraphicsTitle" />
 
+    <ListPreference
+        android:defaultValue="0"
+        android:entries="@array/storage"
+        android:entryValues="@array/storageValues"
+        android:key="storage"
+        android:summary="@string/preferencesStorageSummary"
+        android:title="@string/preferencesStorageTitle" />
+    
+    
     <EditTextPreference
         android:defaultValue="3"
         android:key="asteroidFragments"
         android:summary="@string/preferencesFragmentsSummary"
         android:title="@string/preferencesFragmentsSummary" />
+    
+    
 </PreferenceScreen>

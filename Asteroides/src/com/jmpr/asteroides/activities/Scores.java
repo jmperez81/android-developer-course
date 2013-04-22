@@ -10,7 +10,7 @@ import com.jmpr.asteroides.R;
 import com.jmpr.asteroides.customizations.CustomAdapter;
 
 public class Scores extends ListActivity {
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

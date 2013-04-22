@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scoreboard>
+    <score date="1288122023410">
+          <name>Juan</name>
+          <value>45000</value>
+    </score>
+    <score date="1288122428132">
+          <name>Otro nombre</name>
+          <value>31000</value>
+    </score>
+</scoreboard>

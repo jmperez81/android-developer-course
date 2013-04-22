@@ -23,6 +23,8 @@
     <string name="preferencesFragmentsSummary">Number of fragments an asteroid will be divided when destroyed</string>
     <string name="preferencesFragmentsTitle">Fragments per asteroid</string>
     <string name="preferencesActivityLabel">Preferences</string>
+    <string name="preferencesStorageTitle">Score storage</string>
+    <string name="preferencesStorageSummary">Define where to store the score information</string>
     <string name="scoreBoardTitle">Score board</string>
     <string name="scoreBoardEmptyList">There is not any score registered</string>
 	<string name="musicServiceStarted">Asteroids music service created</string>
