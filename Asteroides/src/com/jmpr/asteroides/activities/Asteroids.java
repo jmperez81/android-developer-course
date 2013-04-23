@@ -16,6 +16,7 @@ import com.jmpr.asteroides.R;
 import com.jmpr.asteroides.services.MusicService;
 import com.jmpr.asteroides.util.ScoreBoard;
 import com.jmpr.asteroides.util.ScoreBoardArray;
+import com.jmpr.asteroides.util.ScoreBoardDatabase;
 import com.jmpr.asteroides.util.ScoreBoardExternalFile;
 import com.jmpr.asteroides.util.ScoreBoardInternalFile;
 import com.jmpr.asteroides.util.ScoreBoardPreferences;
@@ -109,6 +110,8 @@ public class Asteroids extends Activity {
 			scoreBoard = new ScoreBoardRawFile(this);		// Raw file (read only)
 		} else if ("5".equals(storageSelected)) {
 			scoreBoard = new ScoreBoardXmlSAX(this);		// XML file (read only)
+		} else if ("6".equals(storageSelected)) {
+			scoreBoard = new ScoreBoardDatabase(this);		// SQLiteDatabase
 		}
 	}
 
